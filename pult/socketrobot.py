@@ -33,7 +33,7 @@ class SocketRobot:
     def disconnect(self):
         self._sender.disconnect()
 
-    def _sendPackage(self):
+    def sendPackage(self):
         self._sender.sendPackage(self._sender.pack(
             self._argDict["turnForwardArg"], self._argDict["moveArg"],
             self._argDict["rotateArg"], self._argDict["turnAllArg"],
@@ -45,25 +45,20 @@ class SocketRobot:
     def turnForward(self, scale):  # scale - значение из диапазона (-1, 1)
         # поворачиваем сервами в зависимости от значения со стика
         self._argDict["turnForwardArg"] = float(remapScale(scale))
-        self._sendPackage()
 
     def move(self, scale):  # scale - значение из диапазона (-1, 1) # движемся вперед со скоростью
         # MotorSpeed*коэффициент scale
         self._argDict["moveArg"] = int(remapScale(scale) * self._motorSpeed)
-        self._sendPackage()
 
     def rotate(self, scale):    # scale - значение из диапазона (-1, 1) # поворачиваемся со скоростью моторов
         # MotorSpeed*коэффициент scale
         self._argDict["rotateArg"] = int(remapScale(scale) * self._motorSpeed)
-        self._sendPackage()
 
     def turnAll(self, scale):   # поворачивает всеми сервами на один и тот же угол
         self._argDict["turnAllArg"] = float(remapScale(scale))
-        self._sendPackage()
 
     def setCamera(self, scale):
         self._argDict["setCameraArg"] = float(remapScale(scale))
-        self._sendPackage()
 
     def moveManipulator(self, scale1ax, scale2ax, scale3ax, scale4ax, scale5ax):
         self._argDict["turnFirstAxisArg"] = float(remapScale(scale1ax))
@@ -71,7 +66,6 @@ class SocketRobot:
         self._argDict["turnThirdAxisArg"] = float(remapScale(scale3ax))
         self._argDict["turnFourthAxisArg"] = float(remapScale(scale4ax))
         self._argDict["turnFifthAxisArg"] = float(remapScale(scale5ax))
-        self._sendPackage()
 
     @property
     def exist(self):
@@ -84,4 +78,4 @@ class SocketRobot:
     @motorSpeed.setter
     def motorSpeed(self, value):    # устанавливаем максимально возможную скорость движения, которая дальше будет
         #  изменяться в некотором диапазоне
-        self._motorSpeed = min(max(-100, value), 100)
+        self._motorSpeed = min(max(0, value), 100)
