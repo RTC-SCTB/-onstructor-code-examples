@@ -18,7 +18,7 @@ class Receiver(threading.Thread):
         self._eventMaster = eventmaster.EventMaster()
         self._eventMaster.append(self._eventDict.get("onReceive"))
         self._eventMaster.start()
-        self._packageFormat = 'ffff'
+        self._packageFormat = None
 
     def connect(self):
         if not self._connected:

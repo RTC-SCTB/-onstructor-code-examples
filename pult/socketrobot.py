@@ -6,7 +6,7 @@ class SocketRobot:
         self._ip = None
         self._port = None
         self._sender = None
-        self._motorSpeed = 0
+        self._motorSpeed = 40
         self._argDict = {
             "turnForwardArg": float(0.0),
             "moveArg": int(0.0),
