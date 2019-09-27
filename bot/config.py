@@ -11,6 +11,7 @@ IP = "127.0.0.1"
 PORT = 8004
 RTP_PORT = 5000
 
+
 # TODO: тут ф-ии управления все прописываются
 
 
@@ -33,3 +34,22 @@ def turnAll(scale):
 def setCamera(scale):
     print("setCamera", scale)
 
+
+def turnFirstAxisArg(scale):
+    print("turnFirstAxisArg", scale)
+
+
+def turnSecondAxisArg(scale):
+    print("turnSecondAxisArg", scale)
+
+
+def turnThirdAxisArg(scale):
+    print("turnThirdAxisArg", scale)
+
+
+def turnFourthAxisArg(scale):
+    print("turnFourthAxisArg", scale)
+
+
+def turnFifthAxisArg(scale):
+    print("turnFifthAxisArg", scale)

@@ -13,7 +13,11 @@ control.connectToEvent(config.turnAll, "turnAll")
 control.connectToEvent(config.rotate, "rotate")
 control.connectToEvent(config.move, "move")
 control.connectToEvent(config.setCamera, "setCamera")
-
+control.connectToEvent(config.turnFirstAxisArg, "turnFirstAxisArg")
+control.connectToEvent(config.turnSecondAxisArg, "turnSecondAxisArg")
+control.connectToEvent(config.turnThirdAxisArg, "turnThirdAxisArg")
+control.connectToEvent(config.turnFourthAxisArg, "turnFourthAxisArg")
+control.connectToEvent(config.turnFifthAxisArg, "turnFifthAxisArg")
 try:
     control.connect('', config.PORT)
 except Exception as e:

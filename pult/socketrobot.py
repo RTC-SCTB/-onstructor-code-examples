@@ -1,6 +1,11 @@
 from utility import sender
 
 
+def remapScale(scale):
+    """ защита от дурака ограничивает значение scale до диапазона (-1; 1) """
+    return min(max(-1.0, scale), 1.0)
+
+
 class SocketRobot:
     def __init__(self):
         self._ip = None
@@ -12,12 +17,17 @@ class SocketRobot:
             "moveArg": int(0.0),
             "rotateArg": int(0.0),
             "turnAllArg": float(0.0),
-            "setCameraArg": float(0.0)
+            "setCameraArg": float(0.0),
+            "turnFirstAxisArg": float(0.0),
+            "turnSecondAxisArg": float(0.0),
+            "turnThirdAxisArg": float(0.0),
+            "turnFourthAxisArg": float(0.0),
+            "turnFifthAxisArg": float(0.0)
         }
 
     def connect(self, ip, port):
         self._sender = sender.Sender(ip, port)
-        self._sender.packageFormat = "fiiff"
+        self._sender.packageFormat = "fiiff5f"
         self._sender.connect()
 
     def disconnect(self):
@@ -27,30 +37,40 @@ class SocketRobot:
         self._sender.sendPackage(self._sender.pack(
             self._argDict["turnForwardArg"], self._argDict["moveArg"],
             self._argDict["rotateArg"], self._argDict["turnAllArg"],
-            self._argDict["setCameraArg"]
+            self._argDict["setCameraArg"], self._argDict["turnFirstAxisArg"],
+            self._argDict["turnSecondAxisArg"], self._argDict["turnThirdAxisArg"],
+            self._argDict["turnFourthAxisArg"], self._argDict["turnFifthAxisArg"]
         ))
 
     def turnForward(self, scale):  # scale - значение из диапазона (-1, 1)
         # поворачиваем сервами в зависимости от значения со стика
-        self._argDict["turnForwardArg"] = float(scale)
+        self._argDict["turnForwardArg"] = float(remapScale(scale))
         self._sendPackage()
 
     def move(self, scale):  # scale - значение из диапазона (-1, 1) # движемся вперед со скоростью
         # MotorSpeed*коэффициент scale
-        self._argDict["moveArg"] = int(scale * self._motorSpeed)
+        self._argDict["moveArg"] = int(remapScale(scale) * self._motorSpeed)
         self._sendPackage()
 
     def rotate(self, scale):    # scale - значение из диапазона (-1, 1) # поворачиваемся со скоростью моторов
         # MotorSpeed*коэффициент scale
-        self._argDict["rotateArg"] = int(scale * self._motorSpeed)
+        self._argDict["rotateArg"] = int(remapScale(scale) * self._motorSpeed)
         self._sendPackage()
 
     def turnAll(self, scale):   # поворачивает всеми сервами на один и тот же угол
-        self._argDict["turnAllArg"] = float(scale)
+        self._argDict["turnAllArg"] = float(remapScale(scale))
         self._sendPackage()
 
     def setCamera(self, scale):
-        self._argDict["setCameraArg"] = float(scale)
+        self._argDict["setCameraArg"] = float(remapScale(scale))
+        self._sendPackage()
+
+    def moveManipulator(self, scale1ax, scale2ax, scale3ax, scale4ax, scale5ax):
+        self._argDict["turnFirstAxisArg"] = float(remapScale(scale1ax))
+        self._argDict["turnSecondAxisArg"] = float(remapScale(scale2ax))
+        self._argDict["turnThirdAxisArg"] = float(remapScale(scale3ax))
+        self._argDict["turnFourthAxisArg"] = float(remapScale(scale4ax))
+        self._argDict["turnFifthAxisArg"] = float(remapScale(scale5ax))
         self._sendPackage()
 
     @property
@@ -64,11 +84,4 @@ class SocketRobot:
     @motorSpeed.setter
     def motorSpeed(self, value):    # устанавливаем максимально возможную скорость движения, которая дальше будет
         #  изменяться в некотором диапазоне
-        if value >= 100:
-            self._motorSpeed = 100
-        elif value <= - 100:
-            self._motorSpeed = -100
-        else:
-            self._motorSpeed = value
-
-
+        self._motorSpeed = min(max(-100, value), 100)
