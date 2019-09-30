@@ -18,6 +18,9 @@ control.connectToEvent(config.turnSecondAxisArg, "turnSecondAxisArg")
 control.connectToEvent(config.turnThirdAxisArg, "turnThirdAxisArg")
 control.connectToEvent(config.turnFourthAxisArg, "turnFourthAxisArg")
 control.connectToEvent(config.turnFifthAxisArg, "turnFifthAxisArg")
+
+config.initializeAll()
+
 try:
     control.connect('', config.PORT)
 except Exception as e:
