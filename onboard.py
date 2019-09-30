@@ -14,6 +14,8 @@ control.connectToEvent(config.rotate, "rotate")
 control.connectToEvent(config.move, "move")
 control.connectToEvent(config.setCamera, "setCamera")
 
+config.initializeAll()
+
 try:
     control.connect('', config.PORT)
 except Exception as e:

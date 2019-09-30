@@ -45,7 +45,10 @@ class Control(threading.Thread):
         def rotateCamera(w):
             if w:
                 self._cameraPos = not self._cameraPos
-                self.robot.setCamera(int(self._cameraPos))  # True - 1, False - 0
+                if self._cameraPos:
+                    self.robot.setCamera(0.4)
+                else:
+                    self.robot.setCamera(0.0)
                 self.robot.sendPackage()
 
         self._joystick.onButtonClick(config.ADD_SPEED_BUTTON, addSpeed)
@@ -79,7 +82,10 @@ class Control(threading.Thread):
                 if (key.char == 'u') or (key.char == 'i'):
                     self._rotateScale = 0.0
                 if key.char == 'c':
-                    self.robot.setCamera(int(self._cameraPos))  # True - 1, False - 0
+                    if self._cameraPos:
+                        self.robot.setCamera(0.4)
+                    else:
+                        self.robot.setCamera(0.0)
                     self._cameraPos = not self._cameraPos
                     self.robot.sendPackage()
                 # изменяем скорость робота
