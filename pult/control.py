@@ -6,6 +6,11 @@ from pult import socketrobot
 from pynput import keyboard
 
 
+def remapScale(scale):
+    """ защита от дурака ограничивает значение scale до диапазона (-1; 1) """
+    return min(max(-1.0, scale), 1.0)
+
+
 class Control(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self, daemon=True)
@@ -13,6 +18,12 @@ class Control(threading.Thread):
         self._joystick = None
         self._keyboard = None
         self._cameraPos = False  # позиция камеры
+        self._moveScale = 0.0   # данные о движении робота
+        self._turnScale = 0.0
+        self._rotateScale = 0.0
+        self._manipulatorScaleAxis = [0.0, 0.0, 0.0, 0.0, 0.0]  # позиция манипулятора
+        self._manipulatorMoveStep = 0.01     # шаг движения манипулятора
+        self._selectedAxis = 1  # выбранная ось поворота манипулятора
         self.__exit = False
 
     def setJoystick(self, joystick):  # устанавливаем джойстик, которым будем управлять
@@ -35,6 +46,7 @@ class Control(threading.Thread):
             if w:
                 self._cameraPos = not self._cameraPos
                 self.robot.setCamera(int(self._cameraPos))  # True - 1, False - 0
+                self.robot.sendPackage()
 
         self._joystick.onButtonClick(config.ADD_SPEED_BUTTON, addSpeed)
         self._joystick.onButtonClick(config.SUB_SPEED_BUTTON, subSpeed)
@@ -44,26 +56,43 @@ class Control(threading.Thread):
         def onPress(key):
             try:
                 if key.char == 'w':
-                    self.robot.move(1.0)
+                    self._moveScale = 1.0
                 elif key.char == 's':
-                    self.robot.move(-1.0)
+                    self._moveScale = -1.0
                 if key.char == 'a':
-                    self.robot.turnForward(-0.5)
+                    self._turnScale = -0.5
                 elif key.char == 'd':
-                    self.robot.turnForward(0.5)
+                    self._turnScale = 0.5
+                if key.char == 'u':
+                    self._rotateScale = -0.5
+                elif key.char == 'i':
+                    self._rotateScale = 0.5
             except AttributeError:
                 pass
 
         def onRelease(key):
             try:
                 if (key.char == 'w') or (key.char == 's'):
-                    self.robot.move(0.0)
+                    self._moveScale = 0.0
                 if (key.char == 'a') or (key.char == 'd'):
-                    self.robot.turnForward(0.0)
+                    self._turnScale = 0.0
+                if (key.char == 'u') or (key.char == 'i'):
+                    self._rotateScale = 0.0
+                if key.char == 'c':
+                    self.robot.setCamera(int(self._cameraPos))  # True - 1, False - 0
+                    self._cameraPos = not self._cameraPos
+                    self.robot.sendPackage()
+                # изменяем скорость робота
+                if key.char == 'z':
+                    self.robot.motorSpeed -= config.SPEED_CHANGE_STEP
+                elif key.char == 'x':
+                    self.robot.motorSpeed += config.SPEED_CHANGE_STEP
+
             except AttributeError:
                 pass
 
-        keyboard.Listener(on_press=onPress, on_release=onRelease).start()
+        self._keyboard = keyboard.Listener(on_press=onPress, on_release=onRelease)
+        self._keyboard.start()
 
     def exit(self):
         self.__exit = True
@@ -73,11 +102,15 @@ class Control(threading.Thread):
         while not self.__exit:
             try:
                 if self.robot.exist and (self._joystick is not None):  # если клиент и джойстик созданы
-                    if not (self._joystick.buttons[config.ROTATE_LEFT_BUTTON] or self._joystick.buttons[config.ROTATE_RIGHT_BUTTON]):
-                        # если нет разворота на месте
-                        pass
+                    pass  # тут можно сделать управление с джойстика
+                elif self.robot.exist and (self._keyboard is not None):  # если клиент и клавиатура созданы:
+                    if self._rotateScale == 0.0:    # если нет поворота на месте
+                        self.robot.rotate(self._rotateScale)
+                        self.robot.move(self._moveScale)
+                        self.robot.turnForward(self._turnScale)
                     else:
-                        pass
+                        self.robot.rotate(self._rotateScale)
+                    self.robot.sendPackage()
                 else:
                     time.sleep(3)
             except Exception as e:
