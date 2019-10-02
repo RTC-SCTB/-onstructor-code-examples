@@ -1,6 +1,6 @@
 import picamera
 import logging
-import bot.app_streamer
+from bot import app_streamer
 from bot.common import *
 
 class RPiCamStreamer(object):
