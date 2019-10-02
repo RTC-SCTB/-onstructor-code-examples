@@ -1,15 +1,19 @@
 """ Конфигурация робота """
 from bot.RPiPWM import *
-
+from bot import rpicam
 """
     F - Front
     B - Backside
     L - Left
     R - Right
 """
-IP = "127.0.0.1"
+IP = "192.168.42.100"
 PORT = 8004
 RTP_PORT = 5000
+
+VIDEO_FORMAT = rpicam.VIDEO_MJPEG  # поток MJPEG
+VIDEO_RESOLUTION = (640, 360)
+VIDEO_FRAMERATE = 20
 
 chanSrvFL = 1  # канал для передней левой сервы
 chanSrvFR = 2  # канал для передней правой сервы
