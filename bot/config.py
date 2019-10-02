@@ -1,6 +1,7 @@
 """ Конфигурация робота """
 # from RPiPWM import *
 import time
+from bot import rpicam
 
 """
     F - Front
@@ -8,9 +9,13 @@ import time
     L - Left
     R - Right
 """
-IP = "127.0.0.1"
+IP = "192.168.42.100"
 PORT = 8004
 RTP_PORT = 5000
+
+VIDEO_FORMAT = rpicam.VIDEO_MJPEG #поток MJPEG
+VIDEO_RESOLUTION = (640, 360)
+VIDEO_FRAMERATE = 20
 
 # TODO: тут ф-ии управления все прописываются
 srvResolutionMcs = (800, 2200)  # центр в 1500
