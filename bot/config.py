@@ -19,8 +19,10 @@ VIDEO_RESOLUTION = (640, 360)
 VIDEO_FRAMERATE = 20
 
 bus = smbus.SMBus(1)
-motors = BLDCbot(bus)
-motors.setWorkMode(WorkMode.WORK_MODE_PID_I2C)
+motorsF = BLDCbot(bus, addr=0x27)
+motorsF.setWorkMode(WorkMode.WORK_MODE_PID_I2C)
+motorsB = BLDCbot(bus, addr=0x28)
+motorsB.setWorkMode(WorkMode.WORK_MODE_PID_I2C)
 
 chanSrvFL = 1  # канал для передней левой сервы
 chanSrvFR = 2  # канал для передней правой сервы
@@ -66,8 +68,10 @@ def turnForward(scale):
 
 
 def move(speed):
-    motors.setParrotA(-speed)
-    motors.setParrotB(speed)
+    motorsF.setParrotA(-speed)
+    motorsF.setParrotB(speed)
+    motorsB.setParrotA(-speed)
+    motorsB.setParrotB(speed)
 
 
 def rotate(speed):
@@ -76,15 +80,13 @@ def rotate(speed):
         SrvFR.setMcs(getMcsByScale(0))
         SrvBR.setMcs(getMcsByScale(0))
         SrvBL.setMcs(getMcsByScale(0))
-        motors.setParrotA(0)
-        motors.setParrotB(0)
+        move(0)
     else:
         SrvFL.setMcs(getMcsByScale(rotateAngleMcs))
         SrvFR.setMcs(getMcsByScale(-rotateAngleMcs))
         SrvBR.setMcs(getMcsByScale(-rotateAngleMcs))
         SrvBL.setMcs(getMcsByScale(rotateAngleMcs))
-        motors.setParrotA(0)
-        motors.setParrotB(0)
+        move(speed)
 
 
 def turnAll(scale):
@@ -116,8 +118,7 @@ def turnFifthAxisArg(scale):
 
 
 def initializeAll():
-    motors.setParrotA(0)
-    motors.setParrotB(0)
+    move(0)
     SrvFL.setMcs(getMcsByScale(0))
     SrvFR.setMcs(getMcsByScale(0))
     SrvBR.setMcs(getMcsByScale(0))
