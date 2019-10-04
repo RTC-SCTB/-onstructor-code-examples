@@ -89,7 +89,7 @@ class Control(threading.Thread):
                 if (key.char == 'a') or (key.char == 'd'):
                     self._turnScale = 0.0
                 if (key.char == 'u') or (key.char == 'i'):
-                    self._turnScale = 0.0
+                    self._rotateScale = 0.0
                 # выбираем ось манипулятора
                 if key.char == '1':
                     self._selectedAxis = 1
