@@ -118,7 +118,7 @@ class Battery(threading.Thread):
 
 
 # Регистры для работы с PCA9685
-_PCA9685_ADDRESS = 0x40
+_PCA9685_ADDRESS = 0x41
 _MODE1 = 0x00
 _MODE2 = 0x01
 _SUBADR1 = 0x02
