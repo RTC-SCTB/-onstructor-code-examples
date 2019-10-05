@@ -32,7 +32,7 @@ chanMotorL = 14  # каналы моторов, индексы аналогич�
 chanMotorR = 15
 
 srvResolutionMcs = (800, 2200)  # центр в 1500
-rotateAngleMcs = 1950     # угол в mcs, на который надо повернуть сервы, чтобы робот крутился\
+rotateAngleScale = 0.643     # угол в mcs, на который надо повернуть сервы, чтобы робот крутился\
 #  на месте (тут примено 57 градусов) для квадратных роботов это 45 градусов (примерно 1850 mcs)
 
 
@@ -61,12 +61,12 @@ def getMcsByScale(scale):
 def turnForward(scale):
     SrvFL.setMcs(getMcsByScale(scale))
     SrvFR.setMcs(getMcsByScale(scale))
-    SrvBR.setMcs(getMcsByScale(0))
-    SrvBL.setMcs(getMcsByScale(0))
+    SrvBR.setMcs(getMcsByScale(-scale))
+    SrvBL.setMcs(getMcsByScale(-scale))
 
 
 def move(speed):
-    MotorL.setValue(-speed)
+    MotorL.setValue(speed)
     MotorR.setValue(speed)
 
 
@@ -79,12 +79,12 @@ def rotate(speed):
         MotorL.setValue(0)
         MotorR.setValue(0)
     else:
-        SrvFL.setMcs(getMcsByScale(rotateAngleMcs))
-        SrvFR.setMcs(getMcsByScale(-rotateAngleMcs))
-        SrvBR.setMcs(getMcsByScale(-rotateAngleMcs))
-        SrvBL.setMcs(getMcsByScale(rotateAngleMcs))
+        SrvFL.setMcs(getMcsByScale(rotateAngleScale))
+        SrvFR.setMcs(getMcsByScale(-rotateAngleScale))
+        SrvBR.setMcs(getMcsByScale(rotateAngleScale))
+        SrvBL.setMcs(getMcsByScale(-rotateAngleScale))
         MotorL.setValue(speed)
-        MotorR.setValue(speed)
+        MotorR.setValue(-speed)
 
 
 def turnAll(scale):
