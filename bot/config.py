@@ -36,7 +36,7 @@ srvResolutionMcs = (800, 2200)  # центр в 1500
 rotateAngleScale = 0.643     # угол в mcs, на который надо повернуть сервы, чтобы робот крутился\
 #  на месте (тут примено 57 градусов) для квадратных роботов это 45 градусов (примерно 1850 mcs)
 
-
+Light = Servo90(chanLight)  # фары
 SrvFL = Servo270(chanSrvFL)  # передняя левая
 SrvFR = Servo270(chanSrvFR)  # передняя правая
 SrvBL = Servo270(chanSrvBL)  # задняя левая
@@ -117,14 +117,11 @@ def turnFifthAxisArg(scale):
 
 
 def setLight(pos):
-    if pos:
-        print(1)
-    else:
-        print(2)
+    Light.setMcs(1500)
+    Light.setMcs(800)
 
 
 def initializeAll():
-    setLight(False)
     MotorL.setValue(0)
     MotorR.setValue(0)
     SrvFL.setMcs(getMcsByScale(0))
