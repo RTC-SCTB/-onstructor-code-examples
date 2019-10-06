@@ -19,8 +19,9 @@ class Control:
             "turnThirdAxisArg": Event("turnThirdAxisArg"),
             "turnFourthAxisArg": Event("turnFourthAxisArg"),
             "turnFifthAxisArg": Event("turnFifthAxisArg"),
+            "setLight": Event("setLight")
         }
-        self._oldPackage = [None, None, None, None, None, None, None, None, None, None]
+        self._oldPackage = [None, None, None, None, None, None, None, None, None, None, None]
         self._eventMaster = EventMaster()
         self._eventMaster.append(self._eventDict.get("turnForward"))
         self._eventMaster.append(self._eventDict.get("move"))
@@ -32,11 +33,12 @@ class Control:
         self._eventMaster.append(self._eventDict.get("turnThirdAxisArg"))
         self._eventMaster.append(self._eventDict.get("turnFourthAxisArg"))
         self._eventMaster.append(self._eventDict.get("turnFifthAxisArg"))
+        self._eventMaster.append(self._eventDict.get("setLight"))
         self._eventMaster.start()
 
     def connect(self, ip, port):
         self._receiver = receiver.Receiver(ip, port)
-        self._receiver.packageFormat = "fiiff5f"
+        self._receiver.packageFormat = "fiiff5f?"
 
         def onReceive(data):
             if data[0] != self._oldPackage[0]:
@@ -68,6 +70,9 @@ class Control:
 
             if data[9] != self._oldPackage[9]:
                 self._eventDict["turnFifthAxisArg"].push(data[9])
+
+            if data[10] != self._oldPackage[10]:
+                self._eventDict["setLight"].push(data[10])
 
             self._oldPackage = data[:]
 

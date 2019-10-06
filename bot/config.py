@@ -15,6 +15,7 @@ VIDEO_FORMAT = rpicam.VIDEO_MJPEG  # поток MJPEG
 VIDEO_RESOLUTION = (640, 360)
 VIDEO_FRAMERATE = 20
 
+chanLight = 0  # канал фар
 chanSrvFL = 1  # канал для передней левой сервы
 chanSrvFR = 2  # канал для передней правой сервы
 chanSrvBL = 3  # канал для задней левой сервы
@@ -115,7 +116,15 @@ def turnFifthAxisArg(scale):
     SrvM5A.setMcs(getMcsByScale(scale))
 
 
+def setLight(pos):
+    if pos:
+        print(1)
+    else:
+        print(2)
+
+
 def initializeAll():
+    setLight(False)
     MotorL.setValue(0)
     MotorR.setValue(0)
     SrvFL.setMcs(getMcsByScale(0))

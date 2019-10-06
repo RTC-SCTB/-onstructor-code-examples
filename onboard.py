@@ -23,8 +23,9 @@ control.connectToEvent(config.turnSecondAxisArg, "turnSecondAxisArg")
 control.connectToEvent(config.turnThirdAxisArg, "turnThirdAxisArg")
 control.connectToEvent(config.turnFourthAxisArg, "turnFourthAxisArg")
 control.connectToEvent(config.turnFifthAxisArg, "turnFifthAxisArg")
+control.connectToEvent(config.setLight, "setLight")
 
-rpiCamStreamer.start() #запускаем трансляцию
+rpiCamStreamer.start()  # запускаем трансляцию
 config.initializeAll()
 
 try:
