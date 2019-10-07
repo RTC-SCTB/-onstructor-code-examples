@@ -68,9 +68,9 @@ class Control(threading.Thread):
                 elif key.char == 'd':
                     self._turnScale = 0.5
                 if key.char == 'u':
-                    self._rotateScale = -0.5
+                    self._rotateScale = -1.0
                 elif key.char == 'i':
-                    self._rotateScale = 0.5
+                    self._rotateScale = 1.0
                 # вращаем выбранную ось манипулятора
                 if key.char == 'q':
                     self._manipulatorScaleAxis[self._selectedAxis - 1] = remapScale(
