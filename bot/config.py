@@ -33,6 +33,9 @@ chanMotorL = 14  # каналы моторов, индексы аналогич�
 chanMotorR = 15
 
 srvResolutionMcs = (800, 2200)  # центр в 1500
+mtrResolutionMcs = (800, 2200)  # разрещение скоростей мотора в мкс
+mtrBias = 80    # смещение скорости мотора в мкс
+
 rotateAngleScale = 0.643     # угол в mcs, на который надо повернуть сервы, чтобы робот крутился\
 #  на месте (тут примено 57 градусов) для квадратных роботов это 45 градусов (примерно 1850 mcs)
 
@@ -53,6 +56,11 @@ MotorL = ReverseMotor(chanMotorL)  # моторы, индексы аналоги
 MotorR = ReverseMotor(chanMotorR)
 
 
+def getMcsBySpeed(speed):
+    """ получаем значение мкс из значения скорости (-100, 100) """
+    return int(getMcsByScale(speed/100)) + mtrBias
+
+
 def getMcsByScale(scale):
     """ получаем нужные значения мкс(srvResolutionMcs[0], srvResolutionMcs[1]) из значения scale (-1:1) """
     scale = min(max(-1.0, scale), 1.0)  # проверяем еще раз значение scale
@@ -67,8 +75,8 @@ def turnForward(scale):
 
 
 def move(speed):
-    MotorL.setValue(speed)
-    MotorR.setValue(speed)
+    MotorL.setMcs(getMcsBySpeed(speed))
+    MotorR.setMcs(getMcsBySpeed(speed))
 
 
 def rotate(speed):
@@ -77,15 +85,15 @@ def rotate(speed):
         SrvFR.setMcs(getMcsByScale(0))
         SrvBR.setMcs(getMcsByScale(0))
         SrvBL.setMcs(getMcsByScale(0))
-        MotorL.setValue(0)
-        MotorR.setValue(0)
+        MotorL.setMcs(getMcsBySpeed(0))
+        MotorR.setMcs(getMcsBySpeed(0))
     else:
         SrvFL.setMcs(getMcsByScale(rotateAngleScale))
         SrvFR.setMcs(getMcsByScale(-rotateAngleScale))
         SrvBR.setMcs(getMcsByScale(rotateAngleScale))
         SrvBL.setMcs(getMcsByScale(-rotateAngleScale))
-        MotorL.setValue(speed)
-        MotorR.setValue(-speed)
+        MotorL.setMcs(getMcsBySpeed(speed))
+        MotorR.setMcs(getMcsBySpeed(-speed))
 
 
 def turnAll(scale):
@@ -123,8 +131,8 @@ def setLight(pos):
 
 
 def initializeAll():
-    MotorL.setMcs(1500)
-    MotorR.setMcs(1500)
+    MotorL.setMcs(getMcsBySpeed(0))
+    MotorR.setMcs(getMcsBySpeed(0))
     SrvFL.setMcs(getMcsByScale(0))
     SrvFR.setMcs(getMcsByScale(0))
     SrvBR.setMcs(getMcsByScale(0))
