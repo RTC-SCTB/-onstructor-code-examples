@@ -118,12 +118,13 @@ def turnFifthAxisArg(scale):
 
 def setLight(pos):
     Light.setMcs(1500)
+    time.sleep(0.5)
     Light.setMcs(800)
 
 
 def initializeAll():
-    MotorL.setValue(0)
-    MotorR.setValue(0)
+    MotorL.setMcs(1500)
+    MotorR.setMcs(1500)
     SrvFL.setMcs(getMcsByScale(0))
     SrvFR.setMcs(getMcsByScale(0))
     SrvBR.setMcs(getMcsByScale(0))
