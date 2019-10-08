@@ -63,8 +63,8 @@ def getMcsByScale(scale):
 def turnForward(scale):
     SrvFL.setMcs(getMcsByScale(scale))
     SrvFR.setMcs(getMcsByScale(scale))
-    SrvBR.setMcs(getMcsByScale(0))
-    SrvBL.setMcs(getMcsByScale(0))
+    SrvBR.setMcs(getMcsByScale(-scale))
+    SrvBL.setMcs(getMcsByScale(-scale))
 
 
 def move(speed):
