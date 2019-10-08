@@ -21,7 +21,7 @@ VIDEO_FRAMERATE = 20
 bus = smbus.SMBus(1)
 motorsF = BLDCbot(bus, addr=0x27)
 motorsF.setWorkMode(WorkMode.WORK_MODE_PID_I2C)
-motorsB = BLDCbot(bus, addr=0x28)
+motorsB = BLDCbot(bus, addr=0x29)
 motorsB.setWorkMode(WorkMode.WORK_MODE_PID_I2C)
 
 chanSrvFL = 1  # канал для передней левой сервы
@@ -37,7 +37,7 @@ chanSrvM4A = 9  # канал 4 оси манипулятора
 chanSrvM5A = 10  # канал 5 оси манипулятора
 
 srvResolutionMcs = (800, 2200)  # центр в 1500
-rotateAngleMcs = 1950     # угол в mcs, на который надо повернуть сервы, чтобы робот крутился\
+rotateAngleScale = 0.643     # угол в mcs, на который надо повернуть сервы, чтобы робот крутился\
 #  на месте (тут примено 57 градусов) для квадратных роботов это 45 градусов (примерно 1850 mcs)
 
 
@@ -82,10 +82,10 @@ def rotate(speed):
         SrvBL.setMcs(getMcsByScale(0))
         move(0)
     else:
-        SrvFL.setMcs(getMcsByScale(rotateAngleMcs))
-        SrvFR.setMcs(getMcsByScale(-rotateAngleMcs))
-        SrvBR.setMcs(getMcsByScale(-rotateAngleMcs))
-        SrvBL.setMcs(getMcsByScale(rotateAngleMcs))
+        SrvFL.setMcs(getMcsByScale(rotateAngleScale))
+        SrvFR.setMcs(getMcsByScale(-rotateAngleScale))
+        SrvBR.setMcs(getMcsByScale(rotateAngleScale))
+        SrvBL.setMcs(getMcsByScale(-rotateAngleScale))
         move(speed)
 
 
