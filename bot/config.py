@@ -86,7 +86,10 @@ def rotate(speed):
         SrvFR.setMcs(getMcsByScale(-rotateAngleScale))
         SrvBR.setMcs(getMcsByScale(rotateAngleScale))
         SrvBL.setMcs(getMcsByScale(-rotateAngleScale))
-        move(speed)
+        motorsF.setParrotA(speed)
+        motorsF.setParrotB(speed)
+        motorsB.setParrotA(speed)
+        motorsB.setParrotB(speed)
 
 
 def turnAll(scale):
