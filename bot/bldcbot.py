@@ -28,7 +28,7 @@ class WorkMode:
     WORK_MODE_PID_I2C = 0x04  # режим работы - через задаваемые по i2c попугаи
 
 
-class _Direction:
+class Direction:
     """ Класс, хранящий возможные направления """
     FORWARD = 0x00  # вперед
     BACKWARD = 0x01  # назад
@@ -60,17 +60,17 @@ class BLDCbot:
     def setParrotA(self, parrot):
         """ Устанавливает скорость вращение мотора А в попугаях """
         if parrot < 0:
-            self._setDirectionA(_Direction.FORWARD)
+            self._setDirectionA(Direction.FORWARD)
         else:
-            self._setDirectionA(_Direction.BACKWARD)
+            self._setDirectionA(Direction.BACKWARD)
         self._bus.write_byte_data(self._addr, Registers.REG_PARROT_A, abs(parrot))
 
     def setParrotB(self, parrot):
         """ Устанавливает скорость вращение мотора B в попугаях """
         if parrot < 0:
-            self._setDirectionB(_Direction.FORWARD)
+            self._setDirectionB(Direction.FORWARD)
         else:
-            self._setDirectionB(_Direction.BACKWARD)
+            self._setDirectionB(Direction.BACKWARD)
         self._bus.write_byte_data(self._addr, Registers.REG_PARROT_B, abs(parrot))
 
     def setPwmA(self, dir, pwm):
