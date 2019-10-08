@@ -1,8 +1,8 @@
+assert False, "Ветка master только для тестов, перейдите в другую ветку"
 import time
 
 from pult import control
 from pult import config
-
 
 con = control.Control()
 con.fromKeyboard()
