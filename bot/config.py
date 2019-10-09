@@ -6,6 +6,7 @@ from bot import rpicam
 
 """
     F - Front
+    M - Middle
     B - Backside
     L - Left
     R - Right
@@ -21,6 +22,8 @@ VIDEO_FRAMERATE = 20
 bus = smbus.SMBus(1)
 motorsF = BLDCbot(bus, addr=0x27)
 motorsF.setWorkMode(WorkMode.WORK_MODE_PID_I2C)
+motorsM = BLDCbot(bus, addr=0x28)
+motorsM.setWorkMode(WorkMode.WORK_MODE_PID_I2C)
 motorsB = BLDCbot(bus, addr=0x29)
 motorsB.setWorkMode(WorkMode.WORK_MODE_PID_I2C)
 
@@ -28,6 +31,8 @@ chanSrvFL = 1  # канал для передней левой сервы
 chanSrvFR = 2  # канал для передней правой сервы
 chanSrvBL = 3  # канал для задней левой сервы
 chanSrvBR = 4  # канал для задней правой сервы
+chanSrvML = 0  # канал для средней левой сервы
+chanSrvMR = 11  # канал для средней правой сервы
 chanSrvCAM = 5  # канал для сервы с камерой
 
 chanSrvM1A = 6  # канал 1 оси манипулятора
@@ -35,6 +40,7 @@ chanSrvM2A = 7  # канал 2 оси манипулятора
 chanSrvM3A = 8  # канал 3 оси манипулятора
 chanSrvM4A = 9  # канал 4 оси манипулятора
 chanSrvM5A = 10  # канал 5 оси манипулятора
+
 
 srvResolutionMcs = (800, 2200)  # центр в 1500
 rotateAngleScale = 0.643     # угол в mcs, на который надо повернуть сервы, чтобы робот крутился\
@@ -45,6 +51,8 @@ SrvFL = Servo270(chanSrvFL)  # передняя левая
 SrvFR = Servo270(chanSrvFR)  # передняя правая
 SrvBL = Servo270(chanSrvBL)  # задняя левая
 SrvBR = Servo270(chanSrvBR)  # задняя правая
+SrvML = Servo270(chanSrvML)  # средняя левая
+SrvMR = Servo270(chanSrvMR)  # средняя правая
 SrvCAM = Servo90(chanSrvCAM)    # серва камеры
 
 SrvM1A = Servo270(chanSrvM1A)   # сервы манипулятора
@@ -63,13 +71,15 @@ def getMcsByScale(scale):
 def turnForward(scale):
     SrvFL.setMcs(getMcsByScale(scale))
     SrvFR.setMcs(getMcsByScale(scale))
-    SrvBR.setMcs(getMcsByScale(0))
-    SrvBL.setMcs(getMcsByScale(0))
+    SrvBR.setMcs(getMcsByScale(-scale))
+    SrvBL.setMcs(getMcsByScale(-scale))
 
 
 def move(speed):
     motorsF.setParrotA(-speed)
     motorsF.setParrotB(speed)
+    motorsM.setParrotA(-speed)
+    motorsM.setParrotB(speed)
     motorsB.setParrotA(-speed)
     motorsB.setParrotB(speed)
 
@@ -88,6 +98,8 @@ def rotate(speed):
         SrvBL.setMcs(getMcsByScale(-rotateAngleScale))
         motorsF.setParrotA(-speed)
         motorsF.setParrotB(-speed)
+        motorsM.setParrotA(-speed)
+        motorsM.setParrotB(-speed)
         motorsB.setParrotA(-speed)
         motorsB.setParrotB(-speed)
 
@@ -124,6 +136,10 @@ def initializeAll():
     move(0)
     SrvFL.setMcs(getMcsByScale(0))
     SrvFR.setMcs(getMcsByScale(0))
+    time.sleep(0.5)
+    SrvMR.setMcs(getMcsByScale(0))
+    SrvML.setMcs(getMcsByScale(0))
+    time.sleep(0.5)
     SrvBR.setMcs(getMcsByScale(0))
     SrvBL.setMcs(getMcsByScale(0))
     time.sleep(1)
