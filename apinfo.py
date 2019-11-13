@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import subprocess
 from PIL import Image       # библиотеки для рисования на дисплее
 from PIL import ImageDraw
@@ -12,9 +14,9 @@ file = subprocess.Popen(["cat", "/etc/hostapd/hostapd.conf"], stdout=subprocess.
 psw = subprocess.Popen(["grep", "wpa_passphrase"], stdin=file.stdout, stdout=subprocess.PIPE).stdout.read().decode("utf-8")
 psw = psw.split('=')[1].split()
 
-cmd = 'hostname -I | cut -d\' \' -f1'
-ip = subprocess.check_output(cmd, shell=True)     # получаем IP
-ip.rstrip().decode("utf-8")     # удаляем \n, переводим в текст
+cmd = 'hostname -I'
+ip = subprocess.check_output(cmd, shell=True).decode("utf-8")     # получаем IP
+ip = ip.split()     # удаляем \n, переводим в текст
 
 disp = Adafruit_SSD1306.SSD1306_128_64(rst=None)
 disp.begin()    # запускаем дисплей
