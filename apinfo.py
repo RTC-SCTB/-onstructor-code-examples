@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import subprocess
+import time
 from PIL import Image       # библиотеки для рисования на дисплее
 from PIL import ImageDraw
 from PIL import ImageFont
 import Adafruit_SSD1306
+
+time.sleep(10)
 
 file = subprocess.Popen(["cat", "/etc/hostapd/hostapd.conf"], stdout=subprocess.PIPE)
 ssid = subprocess.Popen(["grep", "-w", "ssid"], stdin=file.stdout, stdout=subprocess.PIPE).stdout.read().decode("utf-8")
@@ -31,8 +34,8 @@ font = ImageFont.load_default()     # загружаем стандартный 
 
 
 draw.rectangle((0, 0, width, height), outline=0, fill=0)  # прямоугольник, залитый черным - очищаем дисплей
-draw.text((x, top), "ssid: " + ssid, font=font, fill=255)        # формируем текст
-draw.text((x, top + 8), "psw: " + psw, font=font, fill=255)     # высота строки - 8 пикселей
+draw.text((x, top), "ssid: " + ssid[0], font=font, fill=255)        # формируем текст
+draw.text((x, top + 8), "psw: " + psw[0], font=font, fill=255)     # высота строки - 8 пикселей
 
 for i in range(len(ip)):
     draw.text((x, top + 16 + 8*i), "ip: " + ip[i], font=font, fill=255)

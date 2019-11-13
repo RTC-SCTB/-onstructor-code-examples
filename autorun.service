@@ -1,0 +1,14 @@
+[Unit]
+Description=display info
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/pi/apinfo.py
+WorkingDirectory=/home/pi
+
+User=pi
+Group=dialout
+
+[Install]
+WantedBy=multi-user.target
