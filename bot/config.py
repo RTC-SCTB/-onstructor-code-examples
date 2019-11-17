@@ -39,7 +39,6 @@ def turnForward(scale):
 
 
 def move(speed):
-    robot.Beep()
     robot.leftMotor.SetSpeed(int(-speed))
     robot.rightMotor.SetSpeed(int(speed))
 
@@ -53,6 +52,7 @@ def turnAll(scale):
 
 
 def setCamera(scale):
+    robot.Beep()
     robot.servo[0].SetPosition(int(middleServoPos - scale*servoPosLen))
 
 
