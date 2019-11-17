@@ -9,7 +9,7 @@ from bot import rpicam
 rpiCamStreamer = rpicam.RPiCamStreamer(config.VIDEO_FORMAT, config.VIDEO_RESOLUTION, config.VIDEO_FRAMERATE)
 rpiCamStreamer.setPort(config.RTP_PORT)
 rpiCamStreamer.setHost(config.IP)
-rpiCamStreamer.setRotation(180)
+#rpiCamStreamer.setRotation(180)
 
 control = Control()
 
