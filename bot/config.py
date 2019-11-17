@@ -28,7 +28,7 @@ robot.Start()  # обязательная процедура, запуск по�
 servoPosLen = 255
 middleServoPos = int(servoPosLen / 2)
 
-rotateSpeed = 50
+rotateSpeed = 100
 
 robot.Beep()
 
@@ -40,8 +40,8 @@ def turnForward(scale):
 
 def move(speed):
     robot.Beep()
-    robot.leftMotor.SetSpeed(int(speed))
-    robot.rightMotor.SetSpeed(int(-speed))
+    robot.leftMotor.SetSpeed(int(-speed))
+    robot.rightMotor.SetSpeed(int(speed))
 
 
 def rotate(scale):
@@ -53,7 +53,7 @@ def turnAll(scale):
 
 
 def setCamera(scale):
-    robot.servo[0].SetPosition(int(middleServoPos + scale*servoPosLen))
+    robot.servo[0].SetPosition(int(middleServoPos - scale*servoPosLen))
 
 
 def initializeAll():
