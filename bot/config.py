@@ -2,7 +2,7 @@
 # from RPiPWM import *
 import time
 from bot import rpicam
-import edubot
+from bot import edubot2
 
 """
     F - Front
@@ -10,6 +10,7 @@ import edubot
     L - Left
     R - Right
 """
+
 IP = "192.168.42.100"
 PORT = 8010
 RTP_PORT = 5000
@@ -18,40 +19,46 @@ VIDEO_FORMAT = rpicam.VIDEO_MJPEG  # поток MJPEG
 VIDEO_RESOLUTION = (640, 360)
 VIDEO_FRAMERATE = 20
 
-robot = edubot.EduBot(enableDisplay=True)  # создаем обект для работы с EduBot, робот с OLED дисплеем
+robot = edubot2.EduBot(enableDisplay=True)  # создаем обект для работы с EduBot, робот с OLED дисплеем
 assert robot.Check(), 'EduBot not found!!!'  # проверяем наличие платы Edubot
+
+robot.SetMotorMode(edubot2.MOTOR_MODE_PWM)
 robot.Start()  # обязательная процедура, запуск потока отправляющего на контроллер EduBot онлайн сообщений
 
-# TODO: тут ф-ии управления все прописываются
-srvResolutionMcs = (800, 2200)  # центр в 1500
+servoPosLen = 255
+middleServoPos = int(servoPosLen / 2)
 
+rotateSpeed = 50
 
-def getMcsByScale(scale):
-    """ получаем нужные значения мкс(srvResolutionMcs[0], srvResolutionMcs[1]) из значения scale (-1:1) """
-    scale = min(max(-1.0, scale), 1.0)  # проверяем еще раз значение scale
-    return int(((scale + 1) / 2) * (srvResolutionMcs[1] - srvResolutionMcs[0]) + srvResolutionMcs[0])
+robot.Beep()
 
 
 def turnForward(scale):
-    print("turnForward", scale)
+    robot.leftMotor.SetSpeed(rotateSpeed*scale)
+    robot.leftMotor.SetSpeed(-rotateSpeed*scale)
 
 
 def move(speed):
-    print("move", speed)
+    robot.Beep()
+    robot.leftMotor.SetSpeed(speed)
+    robot.leftMotor.SetSpeed(speed)
 
 
 def rotate(scale):
-    print("rotate", scale)
+    pass
 
 
 def turnAll(scale):
-    print("turnAll", scale)
+    pass
 
 
 def setCamera(scale):
-    print("setCamera", scale)
+    robot.servo[0].SetPosition(middleServoPos + scale*servoPosLen)
 
 
 def initializeAll():
-    pass
+    robot.leftMotor.SetSpeed(0)
+    robot.leftMotor.SetSpeed(0)
+    robot.servo[0].SetPosition(middleServoPos)
+    robot.servo[1].SetPosition(middleServoPos)
     time.sleep(1)
