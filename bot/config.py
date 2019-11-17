@@ -34,14 +34,14 @@ robot.Beep()
 
 
 def turnForward(scale):
-    robot.leftMotor.SetSpeed(rotateSpeed*scale)
-    robot.rightMotor.SetSpeed(-rotateSpeed*scale)
+    robot.leftMotor.SetSpeed(int(rotateSpeed*scale))
+    robot.rightMotor.SetSpeed(int(rotateSpeed*scale))
 
 
 def move(speed):
     robot.Beep()
-    robot.leftMotor.SetSpeed(speed)
-    robot.rightMotor.SetSpeed(speed)
+    robot.leftMotor.SetSpeed(int(speed))
+    robot.rightMotor.SetSpeed(int(-speed))
 
 
 def rotate(scale):
@@ -53,12 +53,12 @@ def turnAll(scale):
 
 
 def setCamera(scale):
-    robot.servo[0].SetPosition(middleServoPos + scale*servoPosLen)
+    robot.servo[0].SetPosition(int(middleServoPos + scale*servoPosLen))
 
 
 def initializeAll():
     robot.leftMotor.SetSpeed(0)
     robot.rightMotor.SetSpeed(0)
-    robot.servo[0].SetPosition(middleServoPos)
-    robot.servo[1].SetPosition(middleServoPos)
+    robot.servo[0].SetPosition(int(middleServoPos))
+    robot.servo[1].SetPosition(int(middleServoPos))
     time.sleep(1)
