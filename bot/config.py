@@ -22,7 +22,7 @@ VIDEO_FRAMERATE = 20
 robot = edubot2.EduBot(enableDisplay=True)  # создаем обект для работы с EduBot, робот с OLED дисплеем
 assert robot.Check(), 'EduBot not found!!!'  # проверяем наличие платы Edubot
 
-robot.SetMotorMode(edubot2.MOTOR_MODE_PWM)
+robot.SetMotorMode(edubot2.MOTOR_MODE_PID)
 robot.Start()  # обязательная процедура, запуск потока отправляющего на контроллер EduBot онлайн сообщений
 
 servoPosLen = 255
@@ -34,13 +34,13 @@ robot.Beep()
 
 
 def turnForward(scale):
-    robot.leftMotor.SetSpeed(int(rotateSpeed*scale))
-    robot.rightMotor.SetSpeed(int(rotateSpeed*scale))
+    robot.leftMotor.SetParrot(int(rotateSpeed*scale))
+    robot.rightMotor.SetParrot(int(rotateSpeed*scale))
 
 
 def move(speed):
-    robot.leftMotor.SetSpeed(int(-speed))
-    robot.rightMotor.SetSpeed(int(speed))
+    robot.leftMotor.SetParrot(int(-speed))
+    robot.rightMotor.SetParrot(int(speed))
 
 
 def rotate(scale):
@@ -57,8 +57,8 @@ def setCamera(scale):
 
 
 def initializeAll():
-    robot.leftMotor.SetSpeed(0)
-    robot.rightMotor.SetSpeed(0)
+    robot.leftMotor.SetParrot(0)
+    robot.rightMotor.SetParrot(0)
     robot.servo[0].SetPosition(int(middleServoPos))
     robot.servo[1].SetPosition(int(middleServoPos))
     time.sleep(1)
